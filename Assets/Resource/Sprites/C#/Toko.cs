@@ -6,7 +6,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class Toko : MonoBehaviour
 {
-
     Rigidbody2D rigid;
     Animator anim;
     // Start is called before the first frame update
@@ -21,7 +20,7 @@ public class Toko : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!rigid) return;
+        if (GameMgr.Instance.isDead || !rigid) return;
 
         if(Input.GetKeyDown(KeyCode.Space) && limitJumpcount> jumpcount)
         {
@@ -29,13 +28,12 @@ public class Toko : MonoBehaviour
 
             rigid.velocity = Vector2.zero;
             rigid.AddForce(Vector2.up * jumpForce);
+            SoundMgr.Instance.PlaySFX("jump");
         }
         else if(Input.GetKeyUp(KeyCode.Space)&& 0<rigid.velocity.y)
         {
             rigid.velocity *= 0.5f;
         }
-
-        if (GameMgr.Instance.isDead || !rigid) return;
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -61,10 +59,11 @@ public class Toko : MonoBehaviour
             if (rigid) rigid.simulated = false;
             if (anim) anim.SetTrigger("isDie");
             GameMgr.Instance.OnDie();
+            SoundMgr.Instance.PlaySFX("die");
         }
     }
 
-    private void GameOver()
+    public void GameOver()
     {
         GameMgr.Instance.GameOver();
     }

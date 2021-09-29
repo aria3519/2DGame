@@ -59,7 +59,9 @@ public class SpritScroll : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(background)
+        if (GameMgr.Instance.isDead) return;
+
+        if (background)
         {
             offset.x = Mathf.Repeat(Time.time * scrollSpeed * 0.01f, 1);
             background.material.mainTextureOffset = offset;
@@ -83,8 +85,6 @@ public class SpritScroll : MonoBehaviour
                 prePosX = groundDatas[i].xPos;
             }
         }
-
-        if (GameMgr.Instance.isDead) return;
     }
 
    

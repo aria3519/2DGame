@@ -24,29 +24,31 @@ public class GameMgr : MonoBehaviour
     private float scoreCount = 0;
     private void Awake()
     {
-        if (null == instance)
-        {
-            instance = this;
-            DontDestroyOnLoad(instance.gameObject);
-            return;
-        }
         var canvas = FindObjectOfType<Canvas>();
         if(canvas)
         {
             var scoreTr = canvas.transform.Find("Score");
             if (scoreTr) score = scoreTr.GetComponent<Text>();
             
-            var gameOverTr = canvas.transform.Find("GameOver");
+            var gameOverTr = canvas.transform.Find("Gameover");
             if (gameOverTr) gameOver = gameOverTr.gameObject;
         }
-       
 
+        SoundMgr.Instance.PlayBGM("music");
+
+        if (null == instance)
+        {
+            instance = this;
+            DontDestroyOnLoad(instance.gameObject);
+            return;
+        }
         Destroy(gameObject);
     }
     public bool isDead { get; private set; }
     public void OnDie()
     {
         isDead = true;
+        SoundMgr.Instance.StopBGM();
     }
     
 
@@ -65,4 +67,6 @@ public class GameMgr : MonoBehaviour
     {
         if (gameOver) gameOver.SetActive(true);
     }
+   
+
 }
